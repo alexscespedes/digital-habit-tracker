@@ -1,0 +1,128 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+}
+
+.container {
+  width: 90%;
+  max-width: 800px;
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1,
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.add-habit {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.add-habit input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+}
+
+.add-habit button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-habit button:hover {
+  background-color: #45a049;
+}
+
+.habit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.habit-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #fafafa;
+}
+
+.habit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.habit-name {
+  font-weight: bold;
+  font-size: 18px;
+  color: #444;
+}
+
+.delete-btn {
+  background-color: #e74c3c;
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+.days {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.days label {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+}
+
+.days input[type="checkbox"] {
+  display: block;
+  margin: 5px auto;
+}
+
+.summary {
+  background-color: #e1f5fe;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  color: #0227bd;
+}
+
+.summary p {
+  font-size: 16px;
+  margin: 10px 0;
+}
