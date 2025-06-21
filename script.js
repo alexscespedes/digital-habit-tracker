@@ -48,6 +48,18 @@ function renderHabitCard(habit) {
     `;
   });
 
+  const progressPercent = Math.round(
+    (habit.progress.filter((done) => done).length / 7) * 100
+  );
+
+  const progressBarHTML = `
+    <div class="progress-bar-container">
+      <div class="progress-bar" style=width: ${progressPercent}%">
+      ${progressPercent}%
+      </div>
+    </div>
+  `;
+
   card.innerHTML = `
     <div class="habit-header">
         <span class="habit-name">${habit.name}</span>
@@ -55,6 +67,7 @@ function renderHabitCard(habit) {
     </div>
     <div class="days">
       ${daysHTML}
+      ${progressBarHTML}
     </div>
   `;
 
@@ -62,6 +75,14 @@ function renderHabitCard(habit) {
     checkbox.addEventListener("change", (e) => {
       const day = parseInt(e.target.dataset.day);
       habit.progress[day] = e.target.checked;
+
+      const checkedCount = habit.progress.filter((done) => done).length;
+      const newPercent = Math.round((checkedCount / 7) * 100);
+
+      const progressBar = card.querySelector(".progress-bar");
+      progressBar.style.width = `${newPercent}%`;
+      progressBar.textContent = `${newPercent}%`;
+
       saveHabitsToStorage();
       updateSummary();
     });
