@@ -13,6 +13,7 @@ addHabitBtn.addEventListener("click", () => {
   }
 
   addHabitCard(habitName);
+  updateSummary();
   habitInput.value = "";
 });
 
@@ -48,8 +49,35 @@ function addHabitCard(name) {
       console.log(
         `Habit: "${name}", Day: ${checkbox.dataset.day}, Checked: ${checkbox.checked}`
       );
+      updateSummary();
     });
   });
 
+  const deleteBtn = card.querySelector(".delete-btn");
+  deleteBtn.addEventListener("click", () => {
+    card.remove();
+    console.log(`Deleted habit: "${name}"`);
+    updateSummary();
+  });
+
   habitList.appendChild(card);
+}
+
+function updateSummary() {
+  const todayIndex = new Date().getDay();
+  const normalizedToday = (todayIndex + 6) % 7;
+
+  const allCards = document.querySelectorAll(".habit-card");
+  const totalHabits = allCards.length;
+  let completeToday = 0;
+
+  allCards.forEach((card) => {
+    const checkbox = card.querySelector(`input[data-day="${normalizedToday}"]`);
+    if (checkbox && checkbox.checked) {
+      completeToday++;
+    }
+  });
+
+  document.getElementById("habit-count").textContent = totalHabits;
+  document.getElementById("completed-today").textContent = completeToday;
 }
