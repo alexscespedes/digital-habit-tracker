@@ -2,6 +2,7 @@ const habitInput = document.getElementById("habit-name");
 const addHabitBtn = document.getElementById("add-habit-btn");
 const habitList = document.getElementById("habit-list");
 
+let habitData = [];
 let habitId = 0;
 
 addHabitBtn.addEventListener("click", () => {
@@ -18,9 +19,21 @@ addHabitBtn.addEventListener("click", () => {
 });
 
 function addHabitCard(name) {
+  const newHabit = {
+    id: habitId++,
+    name: name,
+    progress: [false, false, false, false, false, false, false],
+  };
+
+  habitData.push(newHabit);
+  saveHabitsToStorage();
+  renderHabitCard(newHabit);
+}
+
+function renderHabitCard(habit) {
   const card = document.createElement("div");
   card.className = "habit-card";
-  card.dataset.id = habitId++;
+  card.dataset.id = habit.id;
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -28,14 +41,16 @@ function addHabitCard(name) {
   daysOfWeek.forEach((day, index) => {
     daysHTML += `
     <label>${day}<br>
-      <input type="checkbox" data-day="${index}" />
+      <input type="checkbox" data-day="${index}" ${
+      habit.progress[index] ? "checked" : ""
+    }/>
     </label>
     `;
   });
 
   card.innerHTML = `
     <div class="habit-header">
-        <span class="habit-name">${name}</span>
+        <span class="habit-name">${habit.name}</span>
         <button class="delete-btn">Delete</button>
     </div>
     <div class="days">
@@ -43,20 +58,19 @@ function addHabitCard(name) {
     </div>
   `;
 
-  const checkboxes = card.querySelectorAll("input[type='checkbox']");
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", () => {
-      console.log(
-        `Habit: "${name}", Day: ${checkbox.dataset.day}, Checked: ${checkbox.checked}`
-      );
+  card.querySelectorAll("input[type='checkbox']").forEach((checkbox) => {
+    checkbox.addEventListener("change", (e) => {
+      const day = parseInt(e.target.dataset.day);
+      habit.progress[day] = e.target.checked;
+      saveHabitsToStorage();
       updateSummary();
     });
   });
 
-  const deleteBtn = card.querySelector(".delete-btn");
-  deleteBtn.addEventListener("click", () => {
+  card.querySelector(".delete-btn").addEventListener("click", () => {
     card.remove();
-    console.log(`Deleted habit: "${name}"`);
+    habitData = habitData.filter((h) => h.id !== habit.id);
+    saveHabitsToStorage();
     updateSummary();
   });
 
@@ -81,3 +95,18 @@ function updateSummary() {
   document.getElementById("habit-count").textContent = totalHabits;
   document.getElementById("completed-today").textContent = completeToday;
 }
+
+function saveHabitsToStorage() {
+  localStorage.setItem("habitTrackerData", JSON.stringify(habitData));
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const saved = localStorage.getItem("habitTrackerData");
+  if (saved) {
+    habitData = JSON.parse(saved);
+    habitId =
+      habitData.length > 0 ? Math.max(...habitData.map((h) => h.id)) + 1 : 0;
+    habitData.forEach((habit) => renderHabitCard(habit));
+  }
+  updateSummary();
+});
