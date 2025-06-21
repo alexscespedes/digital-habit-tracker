@@ -21,21 +21,35 @@ function addHabitCard(name) {
   card.className = "habit-card";
   card.dataset.id = habitId++;
 
+  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  let daysHTML = "";
+  daysOfWeek.forEach((day, index) => {
+    daysHTML += `
+    <label>${day}<br>
+      <input type="checkbox" data-day="${index}" />
+    </label>
+    `;
+  });
+
   card.innerHTML = `
     <div class="habit-header">
         <span class="habit-name">${name}</span>
         <button class="delete-btn">Delete</button>
     </div>
     <div class="days">
-        <label>Mon<br><input type="checkbox" /></label>
-        <label>Tue<br><input type="checkbox" /></label>
-        <label>Wed<br><input type="checkbox" /></label>
-        <label>Thu<br><input type="checkbox" /></label>
-        <label>Fri<br><input type="checkbox" /></label>
-        <label>Sat<br><input type="checkbox" /></label>
-        <label>Sun<br><input type="checkbox" /></label>
+      ${daysHTML}
     </div>
   `;
+
+  const checkboxes = card.querySelectorAll("input[type='checkbox']");
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      console.log(
+        `Habit: "${name}", Day: ${checkbox.dataset.day}, Checked: ${checkbox.checked}`
+      );
+    });
+  });
 
   habitList.appendChild(card);
 }
